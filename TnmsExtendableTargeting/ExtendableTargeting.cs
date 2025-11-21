@@ -82,11 +82,7 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
 
      public void RegisterCustomSingleTarget(ICustomTargetCaller predicate)
      {
-         string prefix = predicate.Prefix;
-         if (!prefix.StartsWith('@'))
-         {
-             prefix = '@' + prefix;
-         }
+         string prefix = NormalizePrefix(predicate.Prefix);
          
          if (CheckPrefixIsRegistered(prefix))
                 throw new ArgumentException("The specified prefix is already registered. please consider using another prefix");
@@ -101,11 +97,7 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
 
      public void RegisterCustomTarget(ICustomTarget predicate)
      {
-         string prefix = predicate.Prefix;
-         if (!prefix.StartsWith('@'))
-         {
-             prefix = '@' + prefix;
-         }
+         string prefix = NormalizePrefix(predicate.Prefix);
 
          
          if (CheckPrefixIsRegistered(prefix))
@@ -121,11 +113,7 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
 
      public void RegisterCustomParameterizedTarget(ICustomTargetParameterized predicate)
      {
-         string prefix = predicate.Prefix;
-         if (!prefix.StartsWith('@'))
-         {
-             prefix = '@' + prefix;
-         }
+         string prefix = NormalizePrefix(predicate.Prefix);
          
          if (CheckPrefixIsRegistered(prefix))
              throw new ArgumentException("The specified prefix is already registered. please consider using another prefix");
@@ -211,7 +199,7 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
 
                  if (players.Count > 0)
                  {
-                     targetingResult = new TargetingResult(players, predicate!);
+                     targetingResult = new TargetingResult(players, paramPredicate);
                      return true;
                  }
                  
@@ -244,5 +232,10 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
          }
 
          return _customTargets.ContainsKey(prefix) || _singleTargets.ContainsKey(prefix) || _paramTargets.ContainsKey(prefix);
+     }
+     
+     private string NormalizePrefix(string prefix)
+     {
+         return prefix.StartsWith('@') ? prefix : '@' + prefix;
      }
 }

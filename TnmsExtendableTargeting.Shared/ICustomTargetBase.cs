@@ -6,5 +6,5 @@ public interface ICustomTargetBase
 {
     string Prefix { get; }
     
-    string LocalizedTargetName(CultureInfo culture);
+    string? LocalizedTargetName(CultureInfo culture);
 }

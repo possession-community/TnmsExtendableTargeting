@@ -9,8 +9,8 @@ public class Me: ICustomTargetCaller
 {
     public string Prefix => "@me";
     
-    public string LocalizedTargetName(CultureInfo culture) 
-        => throw new InvalidOperationException("This target is not supports translation.");
+    public string? LocalizedTargetName(CultureInfo culture) 
+        => null;
 
     public IGameClient? Resolve(IGameClient? caller)
         => caller;

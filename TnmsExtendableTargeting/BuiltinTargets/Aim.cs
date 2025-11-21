@@ -12,8 +12,8 @@ public class Aim(ISharedSystem sharedSystem): ICustomTargetCaller
 {
     public string Prefix => "@aim";
     
-    public string LocalizedTargetName(CultureInfo culture) 
-        => throw new InvalidOperationException("This target is not supports translation.");
+    public string? LocalizedTargetName(CultureInfo culture) 
+        => null;
 
     public IGameClient? Resolve(IGameClient? caller)
     {

@@ -9,8 +9,8 @@ public class NameContainedPlayer: ICustomTargetParameterized
 {
     public string Prefix => "";
     
-    public string LocalizedTargetName(CultureInfo culture)
-        => throw new InvalidOperationException("NameContained Targeting is not supports translation.");
+    public string? LocalizedTargetName(CultureInfo culture) 
+        => null;
 
     public bool Resolve(string param, IGameClient targetClient, IGameClient? caller)
     {
