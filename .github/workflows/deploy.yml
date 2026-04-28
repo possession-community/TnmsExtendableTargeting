@@ -13,7 +13,7 @@ jobs:
       shared-projects-phase1: TnmsExtendableTargeting.Shared
       platforms: linux-x64 win-x64
       main-artifact-name: TnmsExtendableTargeting
-      main-artifact-include: shared
+      main-artifact-include: modules shared
       shared-dlls-to-remove: |
         TnmsExtendableTargeting.Shared.dll
       nuget-project-dirs: TnmsExtendableTargeting.Shared
