@@ -135,7 +135,7 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
              var param = targetString.Substring(1);
              
              List<IGameClient> players = new();
-             foreach (var client in _sharedSystem.GetModSharp().GetIServer().GetGameClients())
+             foreach (var client in _sharedSystem.GetModSharp().GetIServer().GetGameClients(true, false))
              {
                  if (_sharpPrefixed.Resolve(param, client, caller))
                      players.Add(client);
@@ -164,7 +164,7 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
          if (_customTargets.TryGetValue(targetString, out var predicate))
          {
              List<IGameClient> players = new();
-             foreach (var client in _sharedSystem.GetModSharp().GetIServer().GetGameClients())
+             foreach (var client in _sharedSystem.GetModSharp().GetIServer().GetGameClients(true, false))
              {
                  if (predicate.Resolve(client, caller))
                      players.Add(client);
@@ -191,7 +191,7 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
              if (_paramTargets.TryGetValue(prefix, out var paramPredicate))
              {
                  List<IGameClient> players = new();
-                 foreach (var client in _sharedSystem.GetModSharp().GetIServer().GetGameClients())
+                 foreach (var client in _sharedSystem.GetModSharp().GetIServer().GetGameClients(true, false))
                  {
                      if (paramPredicate.Resolve(param, client, caller))
                          players.Add(client);
@@ -208,7 +208,7 @@ public class ExtendableTargeting: IModSharpModule, IExtendableTargeting
          }
          
          List<IGameClient> nameContainedPlayers = new();
-         foreach (var client in _sharedSystem.GetModSharp().GetIServer().GetGameClients())
+         foreach (var client in _sharedSystem.GetModSharp().GetIServer().GetGameClients(true, false))
          {
              if (_nameContainedPlayer.Resolve(targetString, client, caller))
                  nameContainedPlayers.Add(client);

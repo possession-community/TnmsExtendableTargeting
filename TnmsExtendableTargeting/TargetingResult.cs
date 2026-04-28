@@ -16,9 +16,9 @@ public class TargetingResult(List<IGameClient> found, ICustomTargetBase targetBa
             return found[0].Name;
         
         if (culture != null)
-            return targetBase.LocalizedTargetName(culture);
+            return targetBase.LocalizedTargetName(culture) ?? string.Empty;
 
-        return targetBase.LocalizedTargetName(Info);
+        return targetBase.LocalizedTargetName(Info) ?? string.Empty;
     }
 
     public List<IGameClient> GetTargets() => found;
