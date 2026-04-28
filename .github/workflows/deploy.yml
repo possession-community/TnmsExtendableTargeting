@@ -1,121 +1,43 @@
-name: .NET CI/CD
+name: CI/CD
 
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'v*'
-  release:
-    types: [created]
+    branches: [main]
+    tags: ['v*']
 
 jobs:
-  build:
-    runs-on: windows-latest
-    if: startsWith(github.ref, 'refs/tags/') == false && contains(github.event.head_commit.message, '[no ci]') == false
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Install dependencies
-        run: nuget restore
-
-      - name: Build
-        run: Start-Process "build.bat" "windows" -Wait -NoNewWindow
-
-  publish:
-    runs-on: windows-latest
-    if: startsWith(github.ref, 'refs/tags/')
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Install dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: Start-Process "build.bat" "windows --override-custom-files" -Wait -NoNewWindow
-
-      - name: Compress artifacts
-        run:
-          Compress-Archive -Path .build/* -Destination TnmsExtendableTargeting.zip
-
-      - name: Upload release assets
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-artifacts
-          path: TnmsExtendableTargeting.zip
+  cicd:
+    uses: possession-community/modsharp-publish-action/.github/workflows/deploy.yml@v1
+    with:
+      projects: TnmsExtendableTargeting
+      shared-projects-phase1: TnmsExtendableTargeting.Shared
+      platforms: linux-x64
+      main-artifact-name: TnmsExtendableTargeting
+      main-artifact-include: shared
+      shared-dlls-to-remove: |
+        TnmsExtendableTargeting.Shared.dll
+      nuget-project-dirs: TnmsExtendableTargeting.Shared
+      nuget-config-props: config.props
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
   release:
-    runs-on: windows-latest
-    needs: publish
-
+    needs: cicd
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
-          name: release-artifacts
+          pattern: release-artifacts*
+          merge-multiple: true
           path: artifacts/
-
-      - name: check files
-        run : |
-          tree
-
-      - name: Create Release and Upload Asset
-        run: |
-          gh release create "${{ github.ref_name }}" --title "Release ${{ github.ref_name }}" --generate-notes --draft=false artifacts/TnmsExtendableTargeting.zip
-        env:
+      - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
-  
-  publish-nuget:
-    runs-on: windows-latest
-    needs: release
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET
-        
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Install dependencies
-        run: dotnet restore
-        working-directory: TnmsExtendableTargeting.Shared
-
-      - name: Build
-        run: dotnet build -c Release -p:DebugType=None -p:DebugSymbols=false
-        working-directory: TnmsExtendableTargeting.Shared
-
-      - name: Pack
-        run: dotnet pack --configuration Release
-        working-directory: TnmsExtendableTargeting.Shared
-
-      - name: Extract version
-        id: package_version
         run: |
-          $xml = [Xml] (Get-Content config.props)
-          $version = $xml.SelectSingleNode("//Project/PropertyGroup/Version").InnerText.Trim()
-          echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
-        shell: pwsh
-
-      - name: Publish to Nuget
-        run: |
-          dotnet nuget push "bin/Release/TnmsExtendableTargeting.Shared.${{env.VERSION}}.nupkg" --skip-duplicate --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
-        working-directory: TnmsExtendableTargeting.Shared
+          gh release create "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "Release ${GITHUB_REF_NAME}" \
+            --generate-notes \
+            artifacts/*.zip

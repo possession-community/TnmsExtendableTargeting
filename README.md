@@ -1,4 +1,4 @@
-﻿# [TnmsExtendableTargeting](https://github.com/fltuna/TnmsExtendableTargeting)
+﻿# [TnmsExtendableTargeting](https://github.com/possession-community/TnmsExtendableTargeting)
 
 ## What is this?
 

@@ -1,9 +1,9 @@
 <Project>
     <PropertyGroup>
-        <Version>0.1.1</Version>
+        <Version>0.1.2</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Copyright>© 2025 faketuna</Copyright>
-        <RepositoryUrl>https://github.com/fltuna/TnmsExtendableTargeting</RepositoryUrl>
+        <RepositoryUrl>https://github.com/possession-community/TnmsExtendableTargeting</RepositoryUrl>
         <TargetFramework>net10.0</TargetFramework>
         <LangVersion>13</LangVersion>
         <ImplicitUsings>false</ImplicitUsings>

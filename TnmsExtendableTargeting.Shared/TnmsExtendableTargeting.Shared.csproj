@@ -3,10 +3,11 @@
     <Import Project="..\config.props" />
     
     <PropertyGroup>
+        <PackageId>TnmsExtendableTargeting.Shared</PackageId>
         <AssemblyName>TnmsExtendableTargeting.Shared</AssemblyName>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <PackageReference Include="ModSharp.Sharp.Shared" Version="2.1.79" ExcludeAssets="runtime" />
+        <PackageReference Include="ModSharp.Sharp.Shared" Version="2.1.121" ExcludeAssets="runtime" />
     </ItemGroup>
 </Project>

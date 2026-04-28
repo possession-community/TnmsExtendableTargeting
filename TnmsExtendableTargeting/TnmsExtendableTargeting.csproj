@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ModSharp.Sharp.Shared" Version="2.1.79" ExcludeAssets="runtime" />
+        <PackageReference Include="ModSharp.Sharp.Shared" Version="2.1.121" ExcludeAssets="runtime" />
         <ProjectReference Include="..\TnmsExtendableTargeting.Shared\TnmsExtendableTargeting.Shared.csproj" Private="false" ExcludeAssets="all" />
     </ItemGroup>
 
