@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TnmsExtendableTargeting.Shared/TnmsExtendableTargeting.Shared.csproj" />
+  <Project Path="TnmsExtendableTargeting/TnmsExtendableTargeting.csproj" />
+</Solution>
